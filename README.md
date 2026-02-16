@@ -1,86 +1,110 @@
-# DeepSeek Balance Checker CLI
+# dsbc - DeepSeek Balance Checker
 
-A command-line tool to check DeepSeek API account balances and view available models with pricing.
+[![PyPI version](https://img.shields.io/pypi/v/dsbc.svg)](https://pypi.org/project/dsbc/)
+[![Python versions](https://img.shields.io/pypi/pyversions/dsbc.svg)](https://pypi.org/project/dsbc/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Actions](https://github.com/ianmerlos/dsbc/actions/workflows/release.yml/badge.svg)](https://github.com/ianmerlos/dsbc/actions/workflows/release.yml)
+
+A modern Python CLI tool to check DeepSeek API account balances and view available models. Installable via both `pip` and `uv`.
 
 ## Features
 
-- ✅ Check account balance (total, available, used)
-- ✅ View available models and their pricing
-- ✅ Support for token from environment variable or command-line argument
-- ✅ JSON output option for scripting
-- ✅ API health check
-- ✅ Verbose mode for debugging
-- ✅ Clean, formatted output
+- ✅ **Check account balance** - Total, available, and used balance
+- ✅ **View available models** - With pricing and context window information
+- ✅ **Multiple auth methods** - Environment variables or command-line tokens
+- ✅ **JSON output** - Perfect for scripting and automation
+- ✅ **API health checks** - Verify your API token works
+- ✅ **Verbose mode** - Detailed output for debugging
+- ✅ **Modern packaging** - Works with both `pip` and `uv`
+- ✅ **Type hints** - Full type annotations for better IDE support
+- ✅ **Comprehensive tests** - Well-tested with pytest
+- ✅ **GitHub Actions** - Automated releases to PyPI
 
 ## Installation
 
-### Option 1: Install from source
+### Install with pip
+
+```bash
+# Install from PyPI
+pip install dsbc
+
+# Install with development dependencies
+pip install dsbc[dev]
+
+# Install with uv support
+pip install dsbc[uv]
+```
+
+### Install with uv
+
+```bash
+# Install from PyPI
+uv pip install dsbc
+
+# Install with development dependencies
+uv pip install "dsbc[dev]"
+```
+
+### Install from source
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/deepseek-balance-checker.git
-cd deepseek-balance-checker/cli
+git clone https://github.com/ianmerlos/dsbc.git
+cd dsbc
 
-# Install in development mode
+# Install with pip in development mode
 pip install -e .
 
-# Or install globally
-pip install .
+# Or install with uv
+uv pip install -e .
 ```
 
-### Option 2: Run directly (no installation)
+## Quick Start
 
 ```bash
-# Make the script executable
-chmod +x deepseek_balance.py
+# Set your API token as environment variable
+export DEEPSEEK_API_TOKEN="your-api-token-here"
 
-# Run directly
-./deepseek_balance.py --help
+# Check your balance
+dsbc
+
+# Show available models
+dsbc --models
+
+# JSON output for scripting
+dsbc --json
+
+# Check API health
+dsbc --health
+
+# Verbose mode
+dsbc --verbose
 ```
 
 ## Usage
 
-### Basic Usage
-
-```bash
-# Set environment variable
-export DEEPSEEK_API_TOKEN="your-api-token-here"
-
-# Check balance
-deepseek-balance
-
-# Or run directly
-python deepseek_balance.py
-```
-
-### Command Line Options
+### Basic Commands
 
 ```bash
 # Show help
-deepseek-balance --help
+dsbc --help
 
-# Use specific token
-deepseek-balance --token sk-abc123def456
+# Check balance with specific token
+dsbc --token sk-abc123def456
 
-# Show available models
-deepseek-balance --models
+# Show models and balance
+dsbc --models --verbose
 
-# Show both balance and models
-deepseek-balance --verbose
+# Output in JSON format
+dsbc --json
 
-# JSON output (for scripting)
-deepseek-balance --json
-
-# Check API health only
-deepseek-balance --health
-
-# Verbose mode
-deepseek-balance --verbose
+# Check if API is accessible
+dsbc --health
 ```
 
 ### Environment Variables
 
-The tool checks for API tokens in this order:
+The tool checks for API tokens in this order of priority:
 
 1. `--token` command-line argument
 2. `DEEPSEEK_API_TOKEN` environment variable (default)
@@ -101,7 +125,7 @@ export DEEPSEEK_TOKEN="sk-xyz789uvw012"
 ### Example 1: Basic Balance Check
 
 ```bash
-$ deepseek-balance
+$ dsbc
 ==================================================
 DEEPSEEK ACCOUNT BALANCE
 ==================================================
@@ -117,7 +141,7 @@ Last Updated:     2024-01-15 14:30:00 UTC
 ### Example 2: Check Models
 
 ```bash
-$ deepseek-balance --models
+$ dsbc --models
 ==================================================
 DEEPSEEK AVAILABLE MODELS
 ==================================================
@@ -141,7 +165,7 @@ Model: DeepSeek Coder
 ### Example 3: JSON Output
 
 ```bash
-$ deepseek-balance --json
+$ dsbc --json
 {
   "total_balance": 100.0,
   "available_balance": 75.5,
@@ -152,108 +176,167 @@ $ deepseek-balance --json
 }
 ```
 
-### Example 4: Verbose Mode
-
-```bash
-$ deepseek-balance --verbose
-Using API token: sk-abc1...xyz9
-API Health: ✅ Healthy
-==================================================
-DEEPSEEK ACCOUNT BALANCE
-==================================================
-Total Balance:    100.00 USD
-Available Balance: 75.50 USD
-Used Balance:     24.50 USD
-Usage:            24.5%
-Account ID:       acc_1234567890
-Last Updated:     2024-01-15 14:30:00 UTC
-==================================================
-```
-
-## API Integration
-
-### Python Module Usage
-
-You can also use the client as a Python module:
+### Example 4: Python Module Usage
 
 ```python
-from deepseek_balance import DeepSeekClient
+from dsbc import DeepSeekClient
 
 # Initialize client
 client = DeepSeekClient("your-api-token")
 
 # Get balance
 balance = client.get_balance()
-print(f"Available balance: {balance['available_balance']} {balance['currency']}")
+print(f"Available: {balance['available_balance']} {balance['currency']}")
 
 # Get models
 models = client.get_models()
 for model in models['data']:
-    print(f"Model: {model['name']} - {model['pricing']['input']}/1K tokens")
+    print(f"{model['name']}: ${model['pricing']['input']}/1K tokens")
 ```
 
-## Error Handling
+## Project Structure
 
-The tool provides clear error messages:
-
-```bash
-# No token provided
-$ deepseek-balance
-Error: No API token provided. Set DEEPSEEK_API_TOKEN environment variable or use --token argument.
-
-# Invalid token
-$ deepseek-balance --token invalid-token
-Error: Failed to fetch balance: 401 Client Error: Unauthorized
-
-# Network issues
-$ deepseek-balance
-Error: Failed to fetch balance: HTTPSConnectionPool(host='api.deepseek.com', port=443): Max retries exceeded
+```
+dsbc/
+├── deepseek_balance/          # Main package
+│   ├── __init__.py           # Package exports
+│   ├── cli.py               # CLI interface
+│   └── client.py            # API client
+├── tests/                   # Test suite
+├── .github/workflows/       # GitHub Actions
+├── pyproject.toml          # Modern packaging config
+├── setup.py                # Legacy packaging support
+├── uv.lock                 # uv lock file
+├── requirements.txt        # pip requirements
+├── LICENSE                 # MIT License
+└── README.md              # This file
 ```
 
 ## Development
 
-### Project Structure
+### Setting Up Development Environment
 
-```
-deepseek-balance-checker/
-├── cli/
-│   ├── deepseek_balance.py    # Main CLI script
-│   ├── setup.py               # Package setup
-│   ├── README.md              # This file
-│   ├── requirements.txt       # Dependencies
-│   └── tests/                 # Test files
-├── docs/                      # Documentation
-└── examples/                  # Usage examples
+```bash
+# Clone repository
+git clone https://github.com/ianmerlos/dsbc.git
+cd dsbc
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install with uv (recommended)
+uv pip install -e ".[dev]"
+
+# Or install with pip
+pip install -e ".[dev]"
 ```
 
 ### Running Tests
 
 ```bash
-# Install test dependencies
-pip install pytest requests-mock
+# Run all tests
+pytest
 
-# Run tests
-pytest tests/
+# Run tests with coverage
+pytest --cov=deepseek_balance --cov-report=html
+
+# Run specific test file
+pytest tests/test_client.py -v
 ```
 
-### Contributing
+### Code Quality
+
+```bash
+# Format code with black
+black deepseek_balance tests
+
+# Sort imports with isort
+isort deepseek_balance tests
+
+# Check code style with flake8
+flake8 deepseek_balance tests
+
+# Type checking with mypy
+mypy deepseek_balance
+```
+
+### Building and Publishing
+
+```bash
+# Build package
+python -m build
+
+# Check package
+twine check dist/*
+
+# Test upload to TestPyPI
+twine upload --repository testpypi dist/*
+
+# Upload to PyPI (requires credentials)
+twine upload dist/*
+```
+
+## GitHub Actions
+
+The repository includes GitHub Actions workflow for:
+
+1. **Automated testing** on multiple Python versions
+2. **Code coverage** reporting to Codecov
+3. **Automated releases** to PyPI when tags are pushed
+4. **Manual releases** via workflow dispatch
+
+### Release Process
+
+```bash
+# Create a new version tag
+git tag -a v1.0.0 -m "Release version 1.0.0"
+git push origin v1.0.0
+
+# GitHub Actions will automatically:
+# 1. Run tests on all Python versions
+# 2. Build the package
+# 3. Publish to PyPI
+# 4. Create GitHub release
+```
+
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
-4. Add tests
-5. Submit a pull request
+4. Add tests for your changes
+5. Ensure code quality checks pass
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to the branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT License - see [LICENSE](LICENSE) file for details.
 
-## Disclaimer
+## Security
 
-This tool is not officially affiliated with DeepSeek. Use at your own risk. Always keep your API tokens secure and never commit them to version control.
+**Important Security Notes:**
+
+- Never commit API tokens to version control
+- Use environment variables or secure secret management
+- Consider using `.env` files with `.gitignore`
+- Rotate tokens regularly
+- Monitor usage for suspicious activity
 
 ## Support
 
-- Issues: [GitHub Issues](https://github.com/yourusername/deepseek-balance-checker/issues)
-- Documentation: [GitHub Wiki](https://github.com/yourusername/deepseek-balance-checker/wiki)
-- Email: your.email@example.com
+- **Issues**: [GitHub Issues](https://github.com/ianmerlos/dsbc/issues)
+- **Documentation**: [GitHub Wiki](https://github.com/ianmerlos/dsbc/wiki)
+- **Email**: merlos@example.com
+
+## Acknowledgments
+
+- DeepSeek for providing the API
+- Python community for excellent libraries
+- Contributors who help improve this project
+
+---
+
+**Note**: This tool is not officially affiliated with DeepSeek. Use at your own risk and always review the official DeepSeek API documentation for the most up-to-date information.
