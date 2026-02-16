@@ -1,11 +1,11 @@
-# dsbc - DeepSeek Balance Checker
+# dsbc - DeepSeek Tools Collection
 
 [![PyPI version](https://img.shields.io/pypi/v/dsbc.svg)](https://pypi.org/project/dsbc/)
 [![Python versions](https://img.shields.io/pypi/pyversions/dsbc.svg)](https://pypi.org/project/dsbc/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Actions](https://github.com/ianmerlos/dsbc/actions/workflows/release.yml/badge.svg)](https://github.com/ianmerlos/dsbc/actions/workflows/release.yml)
 
-A modern Python CLI tool to check DeepSeek API account balances and view available models. Installable via both `pip` and `uv`.
+A collection of tools for interacting with DeepSeek API, starting with a Python CLI tool to check account balances and view available models.
 
 ## Features
 
@@ -50,7 +50,7 @@ uv pip install "dsbc[dev]"
 ```bash
 # Clone the repository
 git clone https://github.com/ianmerlos/dsbc.git
-cd dsbc
+cd dsbc/cli
 
 # Install with pip in development mode
 pip install -e .
@@ -194,22 +194,31 @@ for model in models['data']:
     print(f"{model['name']}: ${model['pricing']['input']}/1K tokens")
 ```
 
-## Project Structure
+## Repository Structure
+
+This repository contains multiple components for interacting with DeepSeek API:
 
 ```
 dsbc/
-├── deepseek_balance/          # Main package
-│   ├── __init__.py           # Package exports
-│   ├── cli.py               # CLI interface
-│   └── client.py            # API client
-├── tests/                   # Test suite
-├── .github/workflows/       # GitHub Actions
-├── pyproject.toml          # Modern packaging config
-├── setup.py                # Legacy packaging support
-├── uv.lock                 # uv lock file
-├── requirements.txt        # pip requirements
-├── LICENSE                 # MIT License
-└── README.md              # This file
+├── cli/                    # Python CLI tool (current focus)
+│   ├── deepseek_balance/   # Main package
+│   │   ├── __init__.py    # Package exports
+│   │   ├── cli.py        # CLI interface
+│   │   └── client.py     # API client
+│   ├── tests/            # Test suite
+│   ├── pyproject.toml    # Modern packaging config
+│   ├── setup.py          # Legacy packaging support
+│   ├── uv.lock           # uv lock file
+│   └── requirements.txt  # pip requirements
+├── .github/workflows/    # GitHub Actions
+├── LICENSE               # MIT License
+└── README.md            # This file
+
+Future components may include:
+- android/               # Android app/widget
+- ios/                   # iOS app/widget
+- web/                   # Web dashboard
+- api/                   # REST API server
 ```
 
 ## Development
@@ -219,7 +228,7 @@ dsbc/
 ```bash
 # Clone repository
 git clone https://github.com/ianmerlos/dsbc.git
-cd dsbc
+cd dsbc/cli
 
 # Create virtual environment
 python -m venv venv
@@ -235,6 +244,9 @@ pip install -e ".[dev]"
 ### Running Tests
 
 ```bash
+# Navigate to cli directory
+cd cli
+
 # Run all tests
 pytest
 
@@ -248,6 +260,9 @@ pytest tests/test_client.py -v
 ### Code Quality
 
 ```bash
+# Navigate to cli directory
+cd cli
+
 # Format code with black
 black deepseek_balance tests
 
@@ -264,6 +279,9 @@ mypy deepseek_balance
 ### Building and Publishing
 
 ```bash
+# Navigate to cli directory
+cd cli
+
 # Build package
 python -m build
 
