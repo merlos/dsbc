@@ -20,7 +20,7 @@ def get_version():
 
 setup(
     name="dsbc",
-    version=get_version(),
+    version="1.0.0",
     author="Merlos",
     author_email="merlos@users.github.com",
     description="DeepSeek Balance Checker - CLI tool to check DeepSeek API account balances",
