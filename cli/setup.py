@@ -21,12 +21,12 @@ def get_version():
 setup(
     name="dsbc",
     version=get_version(),
-    author="Ian Merlos",
-    author_email="merlos@example.com",
+    author="Merlos",
+    author_email="merlos@users.github.com",
     description="DeepSeek Balance Checker - CLI tool to check DeepSeek API account balances",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/ianmerlos/dsbc",
+    url="https://github.com/merlos/dsbc",
     packages=find_packages(include=["deepseek_balance", "deepseek_balance.*"]),
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -73,8 +73,8 @@ setup(
     include_package_data=True,
     keywords="deepseek, api, balance, cli, tool, ai, llm",
     project_urls={
-        "Bug Reports": "https://github.com/ianmerlos/dsbc/issues",
-        "Source": "https://github.com/ianmerlos/dsbc",
-        "Documentation": "https://github.com/ianmerlos/dsbc#readme",
+        "Bug Reports": "https://github.com/merlos/dsbc/issues",
+        "Source": "https://github.com/merlos/dsbc",
+        "Documentation": "https://github.com/merlos/dsbc#readme",
     },
 )
