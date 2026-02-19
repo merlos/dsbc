@@ -3,6 +3,7 @@ Tests for DeepSeekClient
 """
 
 import pytest
+import requests
 from unittest.mock import Mock, patch
 from deepseek_balance.client import DeepSeekClient
 
@@ -55,7 +56,7 @@ def test_get_balance_failure(mock_get):
     # Mock failed response
     mock_response = Mock()
     mock_response.status_code = 401
-    mock_response.raise_for_status.side_effect = Exception("Unauthorized")
+    mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("Unauthorized")
     mock_get.return_value = mock_response
     
     # Test client
