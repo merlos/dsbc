@@ -9,12 +9,11 @@ A collection of tools for interacting with DeepSeek API, starting with a Python 
 
 ## Features
 
-- ✅ **Check account balance** - Total, available, and used balance
-- ✅ **View available models** - With pricing and context window information
+- ✅ **Check account balance** - Total, topped-up, and granted balance
+- ✅ **View available models** - List of models available in the API
 - ✅ **Multiple auth methods** - Environment variables or command-line tokens
 - ✅ **JSON output** - Perfect for scripting and automation
 - ✅ **API health checks** - Verify your API token works
-- ✅ **Verbose mode** - Detailed output for debugging
 - ✅ **Modern packaging** - Works with both `pip` and `uv`
 - ✅ **Type hints** - Full type annotations for better IDE support
 - ✅ **Comprehensive tests** - Well-tested with pytest
@@ -130,12 +129,11 @@ $ dsbc
 ==================================================
 DEEPSEEK ACCOUNT BALANCE
 ==================================================
-Total Balance:    100.00 USD
-Available Balance: 75.50 USD
-Used Balance:     24.50 USD
-Usage:            24.5%
-Account ID:       acc_1234567890
-Last Updated:     2024-01-15 14:30:00 UTC
+Status:            ✅ Available
+Currency:          USD
+Total Balance:     18.87 USD
+Topped-up Balance: 18.87 USD
+Granted Balance:   0.00 USD
 ==================================================
 ```
 
@@ -146,20 +144,8 @@ $ dsbc --models
 ==================================================
 DEEPSEEK AVAILABLE MODELS
 ==================================================
-
-Model: DeepSeek Chat
-  ID: deepseek-chat
-  Context Window: 32768
-  Pricing:
-    Input:  $0.00014 per 1K tokens
-    Output: $0.00028 per 1K tokens
-
-Model: DeepSeek Coder
-  ID: deepseek-coder
-  Context Window: 16384
-  Pricing:
-    Input:  $0.00028 per 1K tokens
-    Output: $0.00056 per 1K tokens
+  - deepseek-chat  (owned by: deepseek)
+  - deepseek-reasoner  (owned by: deepseek)
 ==================================================
 ```
 
@@ -168,12 +154,34 @@ Model: DeepSeek Coder
 ```bash
 $ dsbc --json
 {
-  "total_balance": 100.0,
-  "available_balance": 75.5,
-  "used_balance": 24.5,
-  "currency": "USD",
-  "account_id": "acc_1234567890",
-  "timestamp": "2024-01-15T14:30:00Z"
+  "is_available": true,
+  "balance_infos": [
+    {
+      "currency": "USD",
+      "total_balance": "18.87",
+      "granted_balance": "0.00",
+      "topped_up_balance": "18.87"
+    }
+  ]
+}
+```
+
+```bash
+$ dsbc --models --json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "deepseek-chat",
+      "object": "model",
+      "owned_by": "deepseek"
+    },
+    {
+      "id": "deepseek-reasoner",
+      "object": "model",
+      "owned_by": "deepseek"
+    }
+  ]
 }
 ```
 
@@ -187,39 +195,13 @@ client = DeepSeekClient("your-api-token")
 
 # Get balance
 balance = client.get_balance()
-print(f"Available: {balance['available_balance']} {balance['currency']}")
+for info in balance['balance_infos']:
+    print(f"Total: {info['total_balance']} {info['currency']}")
 
 # Get models
 models = client.get_models()
 for model in models['data']:
-    print(f"{model['name']}: ${model['pricing']['input']}/1K tokens")
-```
-
-## Repository Structure
-
-This repository contains multiple components for interacting with DeepSeek API:
-
-```
-dsbc/
-├── cli/                    # Python CLI tool (current focus)
-│   ├── deepseek_balance/   # Main package
-│   │   ├── __init__.py    # Package exports
-│   │   ├── cli.py        # CLI interface
-│   │   └── client.py     # API client
-│   ├── tests/            # Test suite
-│   ├── pyproject.toml    # Modern packaging config
-│   ├── setup.py          # Legacy packaging support
-│   ├── uv.lock           # uv lock file
-│   └── requirements.txt  # pip requirements
-├── .github/workflows/    # GitHub Actions
-├── LICENSE               # MIT License
-└── README.md            # This file
-
-Future components may include:
-- android/               # Android app/widget
-- ios/                   # iOS app/widget
-- web/                   # Web dashboard
-- api/                   # REST API server
+    print(f"{model['id']} (owned by: {model['owned_by']})")
 ```
 
 ## Development
@@ -308,9 +290,11 @@ The repository includes GitHub Actions workflow for:
 ### Release Process
 
 ```bash
-# Create a new version tag
-git tag -a v1.0.0 -m "Release version 1.0.0"
-git push origin v1.0.0
+# Bump version, commit, and create tag locally
+./scripts/set-version.sh 1.2.0
+
+# Push commits and tag to trigger the release workflow
+git push && git push --tags
 
 # GitHub Actions will automatically:
 # 1. Run tests on all Python versions
@@ -346,15 +330,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/ianmerlos/dsbc/issues)
-- **Documentation**: [GitHub Wiki](https://github.com/ianmerlos/dsbc/wiki)
-- **Email**: merlos@example.com
+- **Issues**: [GitHub Issues](https://github.com/merlos/dsbc/issues)
 
-## Acknowledgments
-
-- DeepSeek for providing the API
-- Python community for excellent libraries
-- Contributors who help improve this project
 
 ---
 
