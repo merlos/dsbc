@@ -3,7 +3,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/dsbc.svg)](https://pypi.org/project/dsbc/)
 [![Python versions](https://img.shields.io/pypi/pyversions/dsbc.svg)](https://pypi.org/project/dsbc/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Actions](https://github.com/ianmerlos/dsbc/actions/workflows/release.yml/badge.svg)](https://github.com/ianmerlos/dsbc/actions/workflows/release.yml)
+[![GitHub Actions](https://github.com/merlos/dsbc/actions/workflows/release.yml/badge.svg)](https://github.com/merlos/dsbc/actions/workflows/release.yml)
 
 A collection of tools for interacting with DeepSeek API, starting with a Python CLI tool to check account balances and view available models.
 
@@ -63,7 +63,8 @@ uv pip install -e .
 
 ```bash
 # Set your API token as environment variable
-export DEEPSEEK_API_TOKEN="your-api-token-here"
+export DEEPSEEK_API_TOKEN="your-api-token-here" 
+# Also DEEKSEEK_API_KEY, DEEPSEEK_TOKEN, OPENAI_API_KEY
 
 # Check your balance
 dsbc
