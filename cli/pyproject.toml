@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dsbc"
-version = "1.0.1"
+version = "1.0.2"
 description = "DeepSeek Balance Checker - CLI tool to check DeepSeek API account balances"
 readme = "README.md"
 authors = [
-    {name = "Ian Merlos", email = "merlos@example.com"},
+    {name = "Merlos", email = "merlos@gmail.com"},
 ]
 license = {text = "MIT"}
 keywords = ["deepseek", "api", "balance", "cli", "tool", "ai", "llm"]
@@ -49,10 +49,10 @@ uv = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/ianmerlos/dsbc"
-Documentation = "https://github.com/ianmerlos/dsbc#readme"
-Repository = "https://github.com/ianmerlos/dsbc"
-Issues = "https://github.com/ianmerlos/dsbc/issues"
+Homepage = "https://github.com/merlos/dsbc"
+Documentation = "https://github.com/merlos/dsbc#readme"
+Repository = "https://github.com/merlos/dsbc"
+Issues = "https://github.com/merlos/dsbc/issues"
 
 [project.scripts]
 dsbc = "deepseek_balance.cli:main"

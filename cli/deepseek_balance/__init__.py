@@ -4,7 +4,7 @@ DeepSeek Balance Checker (dsbc)
 A Python package for checking DeepSeek API account balances and managing API usage.
 """
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __author__ = "Merlos"
 __email__ = "merlos@users.github.com"
 
