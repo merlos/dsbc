@@ -35,36 +35,27 @@ def format_balance(balance_data: Dict[str, Any]) -> str:
     output.append("=" * 50)
     output.append("DEEPSEEK ACCOUNT BALANCE")
     output.append("=" * 50)
-    
-    # Extract balance information
-    total_balance = balance_data.get("total_balance", 0)
-    available_balance = balance_data.get("available_balance", 0)
-    used_balance = balance_data.get("used_balance", 0)
-    currency = balance_data.get("currency", "USD")
-    
-    output.append(f"Total Balance:    {total_balance:.2f} {currency}")
-    output.append(f"Available Balance: {available_balance:.2f} {currency}")
-    output.append(f"Used Balance:     {used_balance:.2f} {currency}")
-    
-    # Add usage percentage if total balance > 0
-    if total_balance > 0:
-        usage_percentage = (used_balance / total_balance) * 100
-        output.append(f"Usage:            {usage_percentage:.1f}%")
-    
-    # Add account info if available
-    account_id = balance_data.get("account_id")
-    if account_id:
-        output.append(f"Account ID:       {account_id}")
-    
-    # Add timestamp
-    timestamp = balance_data.get("timestamp")
-    if timestamp:
-        try:
-            dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-            output.append(f"Last Updated:     {dt.strftime('%Y-%m-%d %H:%M:%S UTC')}")
-        except:
-            output.append(f"Last Updated:     {timestamp}")
-    
+
+    is_available = balance_data.get("is_available", True)
+    output.append(f"Status:            {'✅ Available' if is_available else '❌ Unavailable'}")
+
+    balance_infos = balance_data.get("balance_infos", [])
+    if not balance_infos:
+        output.append("No balance information available")
+        output.append("=" * 50)
+        return "\n".join(output)
+
+    for info in balance_infos:
+        currency = info.get("currency", "USD")
+        total_balance = float(info.get("total_balance", 0))
+        granted_balance = float(info.get("granted_balance", 0))
+        topped_up_balance = float(info.get("topped_up_balance", 0))
+
+        output.append(f"Currency:          {currency}")
+        output.append(f"Total Balance:     {total_balance:.2f} {currency}")
+        output.append(f"Topped-up Balance: {topped_up_balance:.2f} {currency}")
+        output.append(f"Granted Balance:   {granted_balance:.2f} {currency}")
+
     output.append("=" * 50)
     return "\n".join(output)
 
@@ -94,24 +85,10 @@ def format_models(models_data: Dict[str, Any]) -> str:
     
     for model in models:
         model_id = model.get("id", "Unknown")
-        model_name = model.get("name", model_id)
-        
-        # Pricing information
-        pricing = model.get("pricing", {})
-        input_price = pricing.get("input", "N/A")
-        output_price = pricing.get("output", "N/A")
-        
-        # Context window
-        context_window = model.get("context_window", "N/A")
-        
-        output.append(f"\nModel: {model_name}")
-        output.append(f"  ID: {model_id}")
-        output.append(f"  Context Window: {context_window}")
-        output.append(f"  Pricing:")
-        output.append(f"    Input:  ${input_price} per 1K tokens")
-        output.append(f"    Output: ${output_price} per 1K tokens")
+        owned_by = model.get("owned_by", "Unknown")
+        output.append(f"  - {model_id}  (owned by: {owned_by})")
     
-    output.append("\n" + "=" * 50)
+    output.append("=" * 50)
     return "\n".join(output)
 
 def get_api_token(args_token: Optional[str] = None) -> str:
