@@ -138,12 +138,15 @@ def test_formatting_functions():
     
     # Test balance formatting
     balance_data = {
-        "total_balance": 100.0,
-        "available_balance": 75.5,
-        "used_balance": 24.5,
-        "currency": "USD",
-        "account_id": "acc_123456",
-        "timestamp": "2024-01-15T14:30:00Z"
+        "is_available": True,
+        "balance_infos": [
+            {
+                "currency": "USD",
+                "total_balance": "100.00",
+                "granted_balance": "24.50",
+                "topped_up_balance": "75.50",
+            }
+        ]
     }
     
     formatted = format_balance(balance_data)
@@ -151,25 +154,21 @@ def test_formatting_functions():
     assert "100.00 USD" in formatted
     assert "75.50 USD" in formatted
     assert "24.50 USD" in formatted
-    assert "acc_123456" in formatted
+    assert "Available" in formatted
     
     # Test models formatting
     models_data = {
         "data": [
             {
                 "id": "deepseek-chat",
-                "name": "DeepSeek Chat",
-                "context_window": 32768,
-                "pricing": {
-                    "input": "0.00014",
-                    "output": "0.00028"
-                }
+                "object": "model",
+                "owned_by": "deepseek"
             }
         ]
     }
     
     formatted = format_models(models_data)
     assert "DEEPSEEK AVAILABLE MODELS" in formatted
-    assert "DeepSeek Chat" in formatted
     assert "deepseek-chat" in formatted
+    assert "deepseek" in formatted
     assert "32768" in formatted
