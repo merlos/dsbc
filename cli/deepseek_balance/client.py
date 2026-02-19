@@ -7,6 +7,7 @@ Client for interacting with DeepSeek API for balance checking and model informat
 import requests
 from typing import Optional, Dict, Any
 from datetime import datetime
+from . import __version__
 
 # DeepSeek API endpoints
 DEEPSEEK_API_BASE = "https://api.deepseek.com"
@@ -28,7 +29,7 @@ class DeepSeekClient:
         self.headers = {
             "Authorization": f"Bearer {api_token}",
             "Content-Type": "application/json",
-            "User-Agent": f"dsbc/1.0.0"
+            "User-Agent": f"dsbc/{__version__}"
         }
     
     def get_balance(self) -> Dict[str, Any]:
