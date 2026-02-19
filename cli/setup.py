@@ -42,7 +42,7 @@ setup(
         "Operating System :: OS Independent",
         "Environment :: Console",
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.9",
     install_requires=[
         "requests>=2.25.0",
         "rich>=13.0.0",  # For pretty output
