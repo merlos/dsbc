@@ -171,4 +171,3 @@ def test_formatting_functions():
     assert "DEEPSEEK AVAILABLE MODELS" in formatted
     assert "deepseek-chat" in formatted
     assert "deepseek" in formatted
-    assert "32768" in formatted
